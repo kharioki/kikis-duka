@@ -41,7 +41,7 @@ const NO_DISCOUNT_OPTION = { label: "No discount", value: "" };
  */
 const DISCOUNT_CODES = {};
 
-export function QRCodeForm({ QECode: InitialQRCode }) {
+export function QRCodeForm({ QRCode: InitialQRCode }) {
   const [QRCode, setQRCode] = useState(InitialQRCode);
   const [showResourcePicker, setShowResourcePicker] = useState(false);
   const [selectedProduct, setSelectedProduct] = useState(QRCode?.product);
