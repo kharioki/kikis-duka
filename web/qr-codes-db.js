@@ -1,15 +1,16 @@
-/**
- * This file interacts with the app's database and is used by the app's REST APIs.
- */
-import sqlite3 from 'sqlite3';
-import path from 'path';
-import shopify from './shopify';
+/*
+  This file interacts with the app's database and is used by the app's REST APIs.
+*/
 
-const DEFAULT_DB_FILE = path.join(process.cwd(), 'qr_codes_db.sqlite');
+import sqlite3 from "sqlite3";
+import path from "path";
+import shopify from "./shopify.js";
+
+const DEFAULT_DB_FILE = path.join(process.cwd(), "qr_codes_db.sqlite");
 const DEFAULT_PURCHASE_QUANTITY = 1;
 
 export const QRCodesDB = {
-  qrCodesTableName: 'qr_codes',
+  qrCodesTableName: "qr_codes",
   db: null,
   ready: null,
 
@@ -44,7 +45,7 @@ export const QRCodesDB = {
     ]);
 
     return rawResults[0].id;
-  }
+  },
 
   update: async function (
     id,
@@ -62,8 +63,16 @@ export const QRCodesDB = {
 
     const query = `
       UPDATE ${this.qrCodesTableName}
-      SET title = ?, productId = ?, variantId = ?, handle = ?, discountId = ?, discountCode = ?, destination = ?
-      WHERE id = ?;
+      SET
+        title = ?,
+        productId = ?,
+        variantId = ?,
+        handle = ?,
+        discountId = ?,
+        discountCode = ?,
+        destination = ?
+      WHERE
+        id = ?;
     `;
 
     await this.__query(query, [
@@ -76,16 +85,13 @@ export const QRCodesDB = {
       destination,
       id,
     ]);
-
     return true;
   },
 
   list: async function (shopDomain) {
     await this.ready;
-
     const query = `
-      SELECT *
-      FROM ${this.qrCodesTableName}
+      SELECT * FROM ${this.qrCodesTableName}
       WHERE shopDomain = ?;
     `;
 
@@ -97,7 +103,8 @@ export const QRCodesDB = {
   read: async function (id) {
     await this.ready;
     const query = `
-      SELECT * FROM ${this.qrCodesTableName} WHERE id = ?;
+      SELECT * FROM ${this.qrCodesTableName}
+      WHERE id = ?;
     `;
     const rows = await this.__query(query, [id]);
     if (!Array.isArray(rows) || rows?.length !== 1) return undefined;
@@ -247,6 +254,7 @@ export const QRCodesDB = {
     });
   },
 };
+
 /* Generate the URL to a product page */
 function productViewURL({ host, productHandle, discountCode }) {
   const url = new URL(host);
@@ -262,6 +270,7 @@ function productViewURL({ host, productHandle, discountCode }) {
 
   return url.toString();
 }
+
 /* Generate the URL to checkout with the product in the cart */
 function productCheckoutURL({ host, variantId, quantity = 1, discountCode }) {
   const url = new URL(host);
