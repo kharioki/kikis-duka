@@ -31,15 +31,11 @@ app.post(
   shopify.processWebhooks({ webhookHandlers: GDPRWebhookHandlers })
 );
 
-// Set up QR code public endpoints
 applyQrCodePublicEndpoints(app);
 
 // All endpoints after this point will require an active session
 app.use("/api/*", shopify.validateAuthenticatedSession());
 
-app.use(express.json());
-
-// Set up QR code API endpoints
 applyQrCodeApiEndpoints(app);
 
 app.use(serveStatic(STATIC_PATH, { index: false }));
